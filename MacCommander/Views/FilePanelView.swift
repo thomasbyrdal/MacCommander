@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 struct FilePanelView: View {
     @Bindable var app: AppViewModel
     let side: PaneSide
+    @Environment(\.appTheme) private var theme
 
     private var panel: PanelViewModel { app.panel(for: side) }
     private var isActive: Bool { app.activeSide == side }
@@ -43,10 +44,13 @@ struct FilePanelView: View {
                     .padding(6)
             }
         }
-        .background(Color(nsColor: .textBackgroundColor))
+        .background(theme.panelBackground)
         .overlay {
             RoundedRectangle(cornerRadius: 6)
-                .strokeBorder(isActive ? Color.accentColor : Color.secondary.opacity(0.25), lineWidth: isActive ? 2 : 1)
+                .strokeBorder(
+                    isActive ? theme.accentBorder : theme.secondaryText.opacity(0.35),
+                    lineWidth: isActive ? 2 : 1
+                )
         }
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .onTapGesture {
@@ -80,13 +84,14 @@ struct FilePanelView: View {
             if !panel.quickSearchQuery.isEmpty {
                 Text(panel.quickSearchQuery)
                     .font(.caption.monospaced())
+                    .foregroundStyle(theme.selectionText)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.accentColor.opacity(0.15), in: Capsule())
+                    .background(theme.selectionFill, in: Capsule())
             }
         }
         .padding(8)
-        .background(isActive ? Color.accentColor.opacity(0.08) : Color.clear)
+        .background(isActive ? theme.pathHeaderFill : Color.clear)
     }
 
     private var columnHeader: some View {
@@ -105,11 +110,12 @@ struct FilePanelView: View {
                 .frame(width: 80, alignment: .leading)
         }
         .font(.caption.weight(.semibold))
+        .foregroundStyle(theme.columnHeader)
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .frame(maxWidth: .infinity)
         .fixedSize(horizontal: false, vertical: true)
-        .background(Color.primary.opacity(0.05))
+        .background(theme.columnHeaderFill)
     }
 
     private func sortButton(_ title: String, column: SortColumn) -> some View {
@@ -123,6 +129,7 @@ struct FilePanelView: View {
                         .font(.system(size: 8, weight: .bold))
                 }
             }
+            .foregroundStyle(theme.columnHeader)
         }
         .buttonStyle(.plain)
     }
@@ -180,6 +187,7 @@ struct FilePanelView: View {
             .scrollContentBackground(.hidden)
             .environment(\.defaultMinListRowHeight, 22)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(theme.panelBackground)
             .onChange(of: panel.focusedIndex) { _, _ in
                 if let id = panel.focusedItemID {
                     // Minimal scroll — keep the list from jumping when focus moves nearby.

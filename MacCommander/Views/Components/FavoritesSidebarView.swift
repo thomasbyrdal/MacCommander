@@ -7,6 +7,7 @@ import SwiftUI
 
 struct FavoritesSidebarView: View {
     @Bindable var app: AppViewModel
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         List {
@@ -16,8 +17,10 @@ struct FavoritesSidebarView: View {
                         Task { await app.navigateToBookmark(bookmark) }
                     } label: {
                         Label(bookmark.name, systemImage: iconName(for: bookmark))
+                            .foregroundStyle(theme.text)
                     }
                     .buttonStyle(.plain)
+                    .listRowBackground(theme.panelBackground)
                     .contextMenu {
                         Button("Remove Bookmark", role: .destructive) {
                             app.settings.removeBookmark(id: bookmark.id)
@@ -32,12 +35,18 @@ struct FavoritesSidebarView: View {
                         Task { await app.navigateToVolume(volume) }
                     } label: {
                         Label(volume.name, systemImage: volumeIcon(volume))
+                            .foregroundStyle(theme.text)
                     }
                     .buttonStyle(.plain)
+                    .listRowBackground(theme.panelBackground)
                 }
             }
         }
         .listStyle(.sidebar)
+        .scrollContentBackground(.hidden)
+        .background(theme.background)
+        .foregroundStyle(theme.text)
+        .tint(theme.accentBorder)
         .frame(minWidth: 160, idealWidth: 180, maxWidth: 220)
         .onAppear { app.refreshVolumes() }
     }

@@ -19,6 +19,7 @@ struct SettingsView: View {
                             Text(mode.title).tag(mode)
                         }
                     }
+                    .help("Classic recreates Norton Commander colors: dark blue panels, cyan text, yellow headers.")
                     Picker("Icon Size", selection: $settings.iconSize) {
                         ForEach(IconSize.allCases) { size in
                             Text(size.title).tag(size)

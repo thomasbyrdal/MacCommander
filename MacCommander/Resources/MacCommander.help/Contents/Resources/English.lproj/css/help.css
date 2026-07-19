@@ -1,0 +1,159 @@
+/* MacCommander Help */
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --link: #0066cc;
+  --border: #d2d2d7;
+  --code-bg: #f5f5f7;
+  --accent: #0055aa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1e;
+    --text: #f5f5f7;
+    --muted: #a1a1a6;
+    --link: #6cb6ff;
+    --border: #3a3a3c;
+    --code-bg: #2c2c2e;
+    --accent: #6cb6ff;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.banner {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.banner img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+}
+
+.banner h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.banner p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+nav.toc {
+  padding: 16px 28px 8px;
+}
+
+nav.toc h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+nav.toc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+nav.toc a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--code-bg);
+}
+
+main {
+  max-width: 720px;
+  padding: 8px 28px 40px;
+}
+
+h2 {
+  margin-top: 1.6em;
+  font-size: 20px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+h3 {
+  margin-top: 1.3em;
+  font-size: 16px;
+}
+
+p, li { color: var(--text); }
+
+.muted { color: var(--muted); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-size: 14px;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+kbd, code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  background: var(--code-bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.page-nav {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.tip {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  background: var(--code-bg);
+  border-radius: 0 8px 8px 0;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>File Operations — MacCommander Help</title>
+  <meta name="AppleTitle" content="File Operations">
+  <meta name="description" content="Copy, move, delete, rename, drag and drop, and other file actions in MacCommander.">
+  <link rel="stylesheet" href="css/help.css">
+</head>
+<body>
+  <header class="banner">
+    <img src="../shrd/icon.png" alt="">
+    <div>
+      <h1>File Operations</h1>
+      <p>Work between panels and with the Finder</p>
+    </div>
+  </header>
+
+  <main>
+    <a name="file-operations"></a>
+    <h2>Copy &amp; move</h2>
+    <p>
+      Select items in the active panel, then press <kbd>F5</kbd> (Copy) or <kbd>F6</kbd> (Move)
+      to send them to the other panel’s current folder.
+    </p>
+    <ul>
+      <li><strong>Confirm Move</strong> (Settings) — when on, Move shows a confirmation dialog</li>
+      <li>When off, Move runs immediately unless a same-named item already exists at the destination</li>
+      <li>On conflict, choose Overwrite, Skip, or Rename</li>
+    </ul>
+
+    <h2>Drag and drop</h2>
+    <ul>
+      <li>Drag between the two panes to <strong>move</strong> files</li>
+      <li>Drop from Finder (or another app) to <strong>copy</strong> into the target panel</li>
+      <li>A dialog appears only when there is a name conflict</li>
+      <li>Dragging one item from a multi-selection moves all selected items</li>
+    </ul>
+
+    <h2>Delete</h2>
+    <ul>
+      <li><kbd>F8</kbd> or <kbd>⌘⌫</kbd> — move to Trash (confirmation depends on Settings)</li>
+      <li><kbd>⌥F8</kbd> — permanently delete</li>
+    </ul>
+
+    <h2>Create &amp; rename</h2>
+    <ul>
+      <li><kbd>F7</kbd> / <kbd>⌘N</kbd> — new folder</li>
+      <li><kbd>⌘⇧N</kbd> — new empty file</li>
+      <li>Rename from the context menu or after focusing an item</li>
+      <li><kbd>⌘⇧R</kbd> — batch rename with tokens such as <code>{name}</code>, <code>{ext}</code>, <code>{counter}</code>, <code>{date}</code></li>
+    </ul>
+
+    <h2>Clipboard</h2>
+    <p>
+      <kbd>⌘C</kbd> / <kbd>⌘X</kbd> / <kbd>⌘V</kbd> copy, cut, and paste within MacCommander
+      and exchange file URLs with other apps via the pasteboard.
+    </p>
+
+    <h2>Compress &amp; extract</h2>
+    <ul>
+      <li>Compress selected items to a zip archive in the current folder</li>
+      <li>Extract a focused <code>.zip</code> archive into the current folder</li>
+    </ul>
+
+    <div class="page-nav">
+      <a href="navigation.html">← Panels &amp; Navigation</a>
+      <a href="preview-tools.html">Preview &amp; Tools →</a>
+    </div>
+  </main>
+</body>
+</html>

@@ -15,6 +15,7 @@ struct FilePreviewContent: View {
     var pluginOverride: AnyView? = nil
     var onQuickLook: (() -> Void)? = nil
 
+    @Environment(\.appTheme) private var theme
     @State private var textPreview: TextPreviewPayload?
     @State private var isLoadingText = false
 
@@ -118,22 +119,27 @@ struct FilePreviewContent: View {
     private var textPreviewBody: some View {
         if isLoadingText, textPreview == nil {
             ProgressView("Loading preview…")
+                .tint(theme.previewText)
         } else if let textPreview {
             VStack(spacing: 0) {
-                TextPreviewRepresentable(text: textPreview.text)
+                TextPreviewRepresentable(
+                    text: textPreview.text,
+                    textColor: NSColor(theme.previewText),
+                    backgroundColor: NSColor(theme.panelBackground)
+                )
                 if let note = textPreview.truncationNote {
                     Text(note)
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(theme.secondaryText)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(.bar)
+                        .background(theme.chromeBackground)
                 }
             }
         } else {
             Text("Unable to read file.")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.secondaryText)
         }
     }
 
@@ -157,23 +163,25 @@ struct FilePreviewContent: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
         }
+        .background(theme.panelBackground)
     }
 
     private var unsupportedPreview: some View {
         VStack(spacing: 12) {
             Image(systemName: "doc")
                 .font(.system(size: 36))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.secondaryText)
             Text(item.name)
                 .font(.headline)
+                .foregroundStyle(theme.previewText)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
             Text("\(item.displayType) · \(item.displaySize)")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.secondaryText)
             Text("Preview not available for this file type.")
                 .font(.caption)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(theme.tertiaryText)
             if onQuickLook != nil {
                 Button("Open in Quick Look") {
                     onQuickLook?()
@@ -182,15 +190,17 @@ struct FilePreviewContent: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(16)
+        .background(theme.panelBackground)
     }
 
     private func metadataRow(_ title: String, _ value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.columnHeader)
             Text(value)
                 .font(.body.monospaced())
+                .foregroundStyle(theme.previewText)
                 .textSelection(.enabled)
         }
     }
@@ -269,6 +279,8 @@ nonisolated struct TextPreviewPayload: Sendable {
 /// AppKit text view — SwiftUI `Text`/`ScrollView` is extremely slow for large ASCII dumps.
 struct TextPreviewRepresentable: NSViewRepresentable {
     let text: String
+    var textColor: NSColor = .labelColor
+    var backgroundColor: NSColor = .textBackgroundColor
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSTextView.scrollableTextView()
@@ -276,6 +288,7 @@ struct TextPreviewRepresentable: NSViewRepresentable {
         scrollView.hasHorizontalScroller = true
         scrollView.autohidesScrollers = true
         scrollView.borderType = .noBorder
+        scrollView.drawsBackground = false
 
         guard let textView = scrollView.documentView as? NSTextView else { return scrollView }
         textView.isEditable = false
@@ -300,7 +313,9 @@ struct TextPreviewRepresentable: NSViewRepresentable {
             height: CGFloat.greatestFiniteMagnitude
         )
         textView.string = text
-        textView.backgroundColor = .textBackgroundColor
+        textView.textColor = textColor
+        textView.backgroundColor = backgroundColor
+        textView.drawsBackground = true
         return scrollView
     }
 
@@ -310,6 +325,8 @@ struct TextPreviewRepresentable: NSViewRepresentable {
             textView.string = text
             textView.scrollToBeginningOfDocument(nil)
         }
+        textView.textColor = textColor
+        textView.backgroundColor = backgroundColor
         if let container = textView.textContainer {
             container.widthTracksTextView = true
             container.containerSize = NSSize(

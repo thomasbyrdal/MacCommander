@@ -154,28 +154,63 @@ struct MacCommanderApp: App {
 
 /// Loads `Resources/icon.png` / `AppIcon.icns` and applies them for Dock + About.
 enum AppIcon {
+    private static var aboutWindow: NSWindow?
+
     static func applyToRunningApplication() {
         guard let image = loadImage() else { return }
         // Force the Dock tile for this process — avoids stale Icon Services / generic white icons.
         NSApplication.shared.applicationIconImage = image
     }
 
+    /// Shows a custom About window. The system About panel clamps icons and cannot show 1024×1024 artwork.
     static func showAboutPanel() {
-        var options: [NSApplication.AboutPanelOptionKey: Any] = [
-            .applicationName: "MacCommander",
-            .credits: NSAttributedString(
-                string: "A dual-pane file manager for macOS.",
-                attributes: [
-                    .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize),
-                    .foregroundColor: NSColor.secondaryLabelColor
-                ]
-            )
-        ]
-        if let icon = loadImage() {
-            // Prefer our artwork — never the generic white system placeholder.
-            options[.applicationIcon] = icon
+        if let aboutWindow, aboutWindow.isVisible {
+            aboutWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
         }
-        NSApplication.shared.orderFrontStandardAboutPanel(options: options)
+
+        let hosting = NSHostingController(rootView: AboutView())
+        let window = NSWindow(contentViewController: hosting)
+        window.title = "About MacCommander"
+        window.styleMask = [.titled, .closable]
+        window.titlebarAppearsTransparent = false
+        window.isReleasedWhenClosed = false
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        aboutWindow = window
+    }
+
+    static func closeAboutPanel() {
+        aboutWindow?.close()
+        aboutWindow = nil
+    }
+
+    /// Full-resolution 1024×1024 icon for the About dialog.
+    static func loadAboutIcon() -> NSImage? {
+        let bundle = Bundle.main
+        if let url = bundle.url(forResource: "AppIcon-1024", withExtension: "png"),
+           let image = NSImage(contentsOf: url) {
+            image.size = NSSize(width: 1024, height: 1024)
+            return image
+        }
+        // Fallback: downscale the master icon.png into a 1024×1024 image.
+        guard let source = loadImage() else { return nil }
+        let size = NSSize(width: 1024, height: 1024)
+        let icon = NSImage(size: size)
+        icon.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .high
+        source.draw(
+            in: NSRect(origin: .zero, size: size),
+            from: NSRect(origin: .zero, size: source.size),
+            operation: .copy,
+            fraction: 1.0,
+            respectFlipped: true,
+            hints: [.interpolation: NSImageInterpolation.high]
+        )
+        icon.unlockFocus()
+        return icon
     }
 
     static func loadImage() -> NSImage? {

@@ -13,11 +13,13 @@ struct FileRowView: View {
     let iconSize: CGFloat
     var gitStatus: GitFileStatus? = nil
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: IconProvider.systemImageName(for: item))
                 .font(.system(size: iconSize - 2))
-                .foregroundStyle(item.isDirectory ? Color.accentColor : .secondary)
+                .foregroundStyle(item.isDirectory ? theme.directoryIcon : theme.secondaryText)
                 .frame(width: iconSize + 2, alignment: .center)
 
             HStack(spacing: 6) {
@@ -25,7 +27,7 @@ struct FileRowView: View {
                     .font(.system(size: 12, design: .monospaced))
                     .lineLimit(1)
                     .truncationMode(.middle)
-                    .foregroundStyle(item.isParentEntry ? Color.secondary : Color.primary)
+                    .foregroundStyle(nameColor)
                     .help(item.name)
 
                 if let gitStatus, gitStatus != .unknown {
@@ -43,21 +45,21 @@ struct FileRowView: View {
 
             Text(item.isParentEntry ? "" : item.displaySize)
                 .font(.system(size: 11, design: .monospaced))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(metaColor)
                 .lineLimit(1)
                 .frame(width: 72, alignment: .trailing)
                 .layoutPriority(0)
 
             Text(item.isParentEntry ? "" : item.displayDate)
                 .font(.system(size: 11, design: .monospaced))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(metaColor)
                 .lineLimit(1)
                 .frame(width: 140, alignment: .trailing)
                 .layoutPriority(0)
 
             Text(item.isParentEntry ? "" : item.displayType)
                 .font(.system(size: 11))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(theme.tertiaryText)
                 .lineLimit(1)
                 .frame(width: 80, alignment: .leading)
                 .layoutPriority(0)
@@ -69,12 +71,29 @@ struct FileRowView: View {
         .contentShape(Rectangle())
     }
 
+    private var nameColor: Color {
+        if isFocused && isActivePanel {
+            return theme.selectionText
+        }
+        if item.isParentEntry {
+            return theme.secondaryText
+        }
+        return theme.text
+    }
+
+    private var metaColor: Color {
+        if isFocused && isActivePanel {
+            return theme.selectionText.opacity(0.85)
+        }
+        return theme.secondaryText
+    }
+
     private var backgroundColor: Color {
         if isFocused && isActivePanel {
-            return Color.accentColor.opacity(0.28)
+            return theme.selectionFill
         }
         if isSelected {
-            return Color.accentColor.opacity(0.12)
+            return theme.inactiveSelectionFill
         }
         return .clear
     }
@@ -84,9 +103,9 @@ struct FileRowView: View {
         case .modified, .renamed, .copied: .orange
         case .added: .green
         case .deleted: .red
-        case .untracked: .blue
+        case .untracked: theme.isClassic ? Color(red: 0.4, green: 1.0, blue: 1.0) : .blue
         case .conflict: .purple
-        case .ignored, .unknown: .secondary
+        case .ignored, .unknown: theme.secondaryText
         }
     }
 }

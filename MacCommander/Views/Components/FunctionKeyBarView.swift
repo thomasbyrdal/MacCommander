@@ -15,6 +15,8 @@ struct FunctionKeyBarView: View {
     let onMenu: () -> Void
     let onQuit: () -> Void
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         HStack(spacing: 4) {
             FunctionKeyButton(key: "F3", title: "View", action: onView)
@@ -28,7 +30,13 @@ struct FunctionKeyBarView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
-        .background(.bar)
+        .background {
+            if theme.isClassic {
+                theme.chromeBackground
+            } else {
+                Rectangle().fill(.bar)
+            }
+        }
     }
 }
 
@@ -36,21 +44,23 @@ private struct FunctionKeyButton: View {
     let key: String
     let title: String
     let action: () -> Void
+    @Environment(\.appTheme) private var theme
 
     var body: some View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Text(key)
                     .font(.caption.weight(.bold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(theme.isClassic ? theme.columnHeader : theme.secondaryText)
                 Text(title)
                     .font(.caption)
+                    .foregroundStyle(theme.text)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 4))
+        .background(theme.functionKeyFill, in: RoundedRectangle(cornerRadius: 4))
     }
 }
