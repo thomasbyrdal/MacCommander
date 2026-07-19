@@ -12,6 +12,8 @@ struct BottomPreviewPanelView: View {
     let onClose: () -> Void
     let onQuickLook: () -> Void
 
+    @Environment(\.appTheme) private var theme
+
     /// Debounced selection so arrow-key navigation does not rebuild previews every keypress.
     @State private var displayedItem: FileItem?
     @State private var debounceTask: Task<Void, Never>?
@@ -20,20 +22,21 @@ struct BottomPreviewPanelView: View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
                 Image(systemName: "eye")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(theme.secondaryText)
                 Text("Preview")
                     .font(.caption.weight(.semibold))
+                    .foregroundStyle(theme.columnHeader)
 
                 if let item = item ?? displayedItem {
                     Text(item.name)
                         .font(.caption.monospaced())
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(theme.secondaryText)
                         .lineLimit(1)
                         .help(item.url.path)
                 } else {
                     Text("No selection")
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(theme.tertiaryText)
                 }
 
                 Spacer()
@@ -52,9 +55,11 @@ struct BottomPreviewPanelView: View {
                 .font(.caption)
                 .help("Hide Preview")
             }
+            .foregroundStyle(theme.text)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(.bar)
+            .background(theme.isClassic ? theme.chromeBackground : Color.clear)
+            .background { if !theme.isClassic { Rectangle().fill(.bar) } }
 
             Group {
                 if let item = displayedItem, !item.isParentEntry {
@@ -70,10 +75,11 @@ struct BottomPreviewPanelView: View {
                         systemImage: "doc.text.magnifyingglass",
                         description: Text("Focus a file in the active panel.")
                     )
+                    .foregroundStyle(theme.previewText)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(nsColor: .textBackgroundColor))
+            .background(theme.panelBackground)
         }
         .frame(minHeight: 160)
         .onAppear {

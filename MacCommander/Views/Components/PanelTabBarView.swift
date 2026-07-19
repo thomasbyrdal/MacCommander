@@ -12,6 +12,8 @@ struct PanelTabBarView: View {
     let onClose: (UUID) -> Void
     let onNew: () -> Void
 
+    @Environment(\.appTheme) private var theme
+
     var body: some View {
         HStack(spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -25,6 +27,7 @@ struct PanelTabBarView: View {
             Button(action: onNew) {
                 Image(systemName: "plus")
                     .font(.caption.weight(.semibold))
+                    .foregroundStyle(theme.text)
                     .frame(width: 22, height: 22)
             }
             .buttonStyle(.plain)
@@ -32,7 +35,7 @@ struct PanelTabBarView: View {
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 4)
-        .background(Color.primary.opacity(0.04))
+        .background(theme.columnHeaderFill)
     }
 
     private func tabButton(_ tab: PanelTab) -> some View {
@@ -43,6 +46,7 @@ struct PanelTabBarView: View {
             } label: {
                 Text(tab.title)
                     .font(.caption)
+                    .foregroundStyle(isActive ? theme.selectionText : theme.text)
                     .lineLimit(1)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
@@ -55,7 +59,7 @@ struct PanelTabBarView: View {
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 8, weight: .bold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(theme.secondaryText)
                 }
                 .buttonStyle(.plain)
                 .padding(.trailing, 6)
@@ -63,11 +67,11 @@ struct PanelTabBarView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 4)
-                .fill(isActive ? Color.accentColor.opacity(0.2) : Color.clear)
+                .fill(isActive ? theme.selectionFill : Color.clear)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 4)
-                .strokeBorder(isActive ? Color.accentColor.opacity(0.5) : Color.clear, lineWidth: 1)
+                .strokeBorder(isActive ? theme.accentBorder.opacity(0.7) : Color.clear, lineWidth: 1)
         )
     }
 }

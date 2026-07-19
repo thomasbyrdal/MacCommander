@@ -15,6 +15,7 @@ struct MainWindowView: View {
             .toolbar { toolbarContent }
             .searchable(text: $app.searchQuery, isPresented: $app.showSearch, prompt: "Filter files")
             .preferredColorScheme(app.settings.appearance.colorScheme)
+            .appTheme(app.settings.appearance.theme)
             .task { await app.bootstrap() }
             .modifier(MenuNotificationModifier(app: app))
             .modifier(AdvancedMenuNotificationModifier(app: app))
@@ -33,6 +34,8 @@ struct MainWindowView: View {
                 app.syncTerminalToActivePanel()
             }
     }
+
+    private var theme: AppTheme { app.settings.appearance.theme }
 
     private var mainContent: some View {
         NavigationSplitView {
@@ -80,6 +83,7 @@ struct MainWindowView: View {
                     onQuit: { NSApp.terminate(nil) }
                 )
             }
+            .background(theme.background)
             .background {
                 KeyboardMonitor { event in
                     KeyboardCommandRouter.handle(event, app: app)

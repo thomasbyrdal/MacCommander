@@ -10,6 +10,7 @@ enum AppearanceMode: String, CaseIterable, Codable, Sendable, Identifiable {
     case system
     case light
     case dark
+    case classic
 
     var id: String { rawValue }
 
@@ -18,14 +19,23 @@ enum AppearanceMode: String, CaseIterable, Codable, Sendable, Identifiable {
         case .system: "System"
         case .light: "Light"
         case .dark: "Dark"
+        case .classic: "Classic"
         }
     }
 
+    /// Base SwiftUI color scheme. Classic forces dark so system controls stay readable.
     var colorScheme: ColorScheme? {
         switch self {
         case .system: nil
         case .light: .light
-        case .dark: .dark
+        case .dark, .classic: .dark
+        }
+    }
+
+    var theme: AppTheme {
+        switch self {
+        case .classic: .classic
+        case .system, .light, .dark: .standard
         }
     }
 }
