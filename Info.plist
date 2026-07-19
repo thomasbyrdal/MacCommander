@@ -4,5 +4,9 @@
 <dict>
 	<key>CFBundleIconFile</key>
 	<string>MacCommander</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>MacCommander.help</string>
+	<key>CFBundleHelpBookName</key>
+	<string>MacCommander Help</string>
 </dict>
 </plist>

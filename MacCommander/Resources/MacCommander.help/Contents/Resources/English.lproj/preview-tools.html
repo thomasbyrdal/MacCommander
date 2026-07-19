@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preview, Edit &amp; Tools — MacCommander Help</title>
+  <meta name="AppleTitle" content="Preview Edit and Tools">
+  <meta name="description" content="Preview files, edit text or hex, use the terminal, compare folders, and find duplicates.">
+  <link rel="stylesheet" href="css/help.css">
+</head>
+<body>
+  <header class="banner">
+    <img src="../shrd/icon.png" alt="">
+    <div>
+      <h1>Preview, Edit &amp; Tools</h1>
+      <p>Inspect and work with file contents</p>
+    </div>
+  </header>
+
+  <main>
+    <a name="preview"></a>
+    <h2>Preview</h2>
+    <ul>
+      <li><kbd>F3</kbd> — open an in-app preview for the focused item</li>
+      <li><kbd>⌃⇧P</kbd> — show or hide the bottom preview pane (follows focus)</li>
+      <li><kbd>⌘Y</kbd> or <kbd>⌥F3</kbd> — system Quick Look</li>
+    </ul>
+    <p>
+      Supported previews include images, PDF, text/source files, and common audio/video formats.
+      Other types show metadata and a Quick Look button.
+    </p>
+
+    <h2>Edit</h2>
+    <ul>
+      <li><kbd>F4</kbd> — open the text editor for text-like files, or the hex editor for binary files</li>
+      <li><kbd>⌘⌥H</kbd> — open the hex editor explicitly</li>
+    </ul>
+
+    <h2>Terminal</h2>
+    <p>
+      Press <kbd>⌃`</kbd> to show the embedded terminal. It can sync to the active panel’s folder
+      (<strong>cd Active</strong>). Use <strong>External</strong> to open Terminal.app in that directory.
+      The terminal and bottom preview pane are mutually exclusive.
+    </p>
+
+    <h2>Compare panels</h2>
+    <p>
+      <kbd>⌘⌥D</kbd> compares the left and right folders and lists items that exist only on one side,
+      are identical, or differ (by name/size/date rules in the compare UI).
+    </p>
+
+    <h2>Find duplicates</h2>
+    <p>
+      <kbd>⌘⇧D</kbd> scans for files with identical contents (hash-based) and lets you review groups
+      and trash unwanted copies.
+    </p>
+
+    <h2>Git status</h2>
+    <p>
+      When the active folder is inside a Git repository, changed files can show status badges,
+      and the status bar shows the current branch and change count.
+    </p>
+
+    <h2>Plugins</h2>
+    <p>
+      MacCommander includes a plugin host for context-menu actions. The built-in sample copies a
+      SHA-256 checksum of the selected file to the clipboard.
+    </p>
+
+    <div class="page-nav">
+      <a href="file-operations.html">← File Operations</a>
+      <a href="keyboard.html">Keyboard Shortcuts →</a>
+    </div>
+  </main>
+</body>
+</html>
