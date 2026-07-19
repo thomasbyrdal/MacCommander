@@ -40,7 +40,7 @@ Built with **Swift 6** and **SwiftUI**, MacCommander focuses on keyboard-driven 
 - Git status badges on files and branch info in the status bar
 
 ### Customization
-- Light / Dark / System appearance
+- Classic / Light / Dark / System appearance
 - Icon size, hidden files, default sort, startup folder
 - Confirm delete / move / overwrite preferences
 - Extensible plugin host (built-in sample: copy SHA-256 checksum)
